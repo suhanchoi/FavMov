@@ -1,9 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from django.views.decorators.http import require_safe
-from .models import Movie, Genre
+from .models import Movie, Genre, MovieComment
 from django.core.paginator import Paginator
 from django.core import serializers
 from django.http import HttpResponse
+from .forms import MovieCommentForm
+
 
 # Create your views here.
 @require_safe
@@ -30,10 +33,42 @@ def index(request):
 @require_safe
 def detail(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
+    movie_comments = movie.moviecomment_set.all()
+    movie_comment_form = MovieCommentForm()
     context = {
         'movie': movie,
+        'movie_comment_form': movie_comment_form,
+        'movie_comments': movie_comments,
     }
     return render(request, 'movies/detail.html', context)
+
+@require_POST
+def create_movie_comment(request, movie_pk):
+    movie = get_object_or_404(Movie, pk=movie_pk)
+    movie_comment_form = MovieCommentForm(request.POST)
+    if movie_comment_form.is_valid():
+        movie_comment = movie_comment_form.save(commit=False)
+        movie_comment.movie = movie
+        movie_comment.user = request.user
+        movie_comment.save()
+        return redirect('movies:detail', movie.pk)
+    context = {
+        'movie_comment_form': movie_comment_form,
+        'movie': movie,
+        'movie_comments': movie.moviecomment_set.all(),
+    }
+    return render(request, 'movies/detail.html', context)
+
+
+@require_POST
+def delete_movie_comment(request, movie_pk, moviecomment_pk):
+    movie = get_object_or_404(Movie, pk=movie_pk)
+    movie_comment = get_object_or_404(MovieComment, pk=moviecomment_pk)
+    if request.user == movie_comment.user:
+        movie_comment.delete()
+    return redirect('movies:detail', movie.pk)
+
+
 
 
 @require_safe
