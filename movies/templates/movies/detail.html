@@ -47,12 +47,10 @@
   <li>
     <a href="{% url 'accounts:profile' comment.user.username %}">
       {{ comment.user }}
-    </a>: {{ comment.content }}
-
-    {{ request.user }} {{comment.user}}
+    </a>- {{ comment.content }}
 
     {% if request.user == comment.user %}
-    <form style="display: inline-block;" action="{% url 'movies:delete_movie_comment' movie.pk moviecomment.pk %}" method="POST">
+    <form style="display: inline-block;" action="{% url 'movies:delete_movie_comment' movie.pk comment.pk %}" method="POST">
       {% csrf_token %}
       <button>[X]</button>
     </form>

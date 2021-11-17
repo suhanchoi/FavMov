@@ -1,6 +1,7 @@
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
+from django.contrib.auth.decorators import login_required
 from .models import Review, Comment
 from .forms import ReviewForm, CommentForm
 
@@ -45,6 +46,38 @@ def detail(request, review_pk):
 
 
 @require_POST
+def delete(request, review_pk):
+    review = get_object_or_404(Review, pk=review_pk)
+    if request.user.is_authenticated:
+        if request.user == review.user: 
+            review.delete()
+            return redirect('community:index')
+    return redirect('community:detail', review_pk)
+
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def update(request, review_pk):
+    review = get_object_or_404(Review, pk=review_pk)
+    if request.user == review.user:
+        if request.method == 'POST':
+            form = ReviewForm(request.POST, instance=review)
+            if form.is_valid():
+                form.save()
+                return redirect('community:detail', review.pk)
+        else:
+            form = ReviewForm(instance=review)
+    else:
+        return redirect('community:index')
+    context = {
+        'review': review,
+        'form': form,
+    }
+    return render(request, 'community/update.html', context)
+
+
+
+@require_POST
 def create_comment(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     comment_form = CommentForm(request.POST)
@@ -60,6 +93,15 @@ def create_comment(request, review_pk):
         'comments': review.comment_set.all(),
     }
     return render(request, 'community/detail.html', context)
+
+@require_POST
+def comments_delete(request, review_pk, comment_pk):
+    if request.user.is_authenticated:
+        comment = get_object_or_404(Comment, pk=comment_pk)
+        if request.user == comment.user:
+            comment.delete()
+    return redirect('community:detail', review_pk)
+
 
 
 @require_POST
