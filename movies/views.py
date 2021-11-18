@@ -32,17 +32,29 @@ def index(request):
 
 @require_safe
 def detail(request, movie_pk):
+
+    RANKS = [
+        '',
+        '★',
+        '★★',
+        '★★★',
+        '★★★★',
+        '★★★★★',
+    ]
+
     movie = get_object_or_404(Movie, pk=movie_pk)
     movie_comments = movie.moviecomment_set.all()
     movie_comment_form = MovieCommentForm()
 
+    for comment in movie_comments:
+        comment.star = RANKS[comment.rank]
     # movie_comment = get_object_or_404(MovieComment, pk=moviecomment_pk)
     
     context = {
         'movie': movie,
         'movie_comment_form': movie_comment_form,
         'movie_comments': movie_comments,
-        'movie_rank': movie_comments.rank,
+        'movie_comments_': movie_comments,
     }
     return render(request, 'movies/detail.html', context)
 
@@ -61,7 +73,7 @@ def create_movie_comment(request, movie_pk):
         'movie_comment_form': movie_comment_form,
         'movie': movie,
         'movie_comments': movie.moviecomment_set.all(),
-        # 'movie_rank': movie.moviecomment_set.rank,
+        'movie_rank': movie.moviecomment_set.rank,
     }
     return render(request, 'movies/detail.html', context)
 

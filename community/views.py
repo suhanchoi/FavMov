@@ -121,4 +121,7 @@ def like(request, review_pk):
             'like_count': review.like_users.count()
         }
         return JsonResponse(context)
-    return redirect('accounts:login')
+    else: 
+        return redirect('accounts:login')
+
+   

@@ -24,7 +24,7 @@
   <li>
     <a href="{% url 'accounts:profile' comment.user.username %}">
       {{ comment.user }}
-    </a>- {{ comment.content }} {{ comment.RANKS.movie_rank.1 }}
+    </a>- {{ comment.content }} {{ comment.star }}
 
     {% if request.user == comment.user %}
     <form style="display: inline-block;" action="{% url 'movies:delete_movie_comment' movie.pk comment.pk %}" method="POST">
