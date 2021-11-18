@@ -16,6 +16,13 @@ class Movie(models.Model):
 
 class MovieComment(models.Model):
     content = models.TextField()
-    #rank 추가?
+    RANKS = [
+        (1, '★'),
+        (2, '★★'),
+        (3, '★★★'),
+        (4, '★★★★'),
+        (5, '★★★★★'),
+    ]
+    rank = models.IntegerField(choices=RANKS, default=5)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

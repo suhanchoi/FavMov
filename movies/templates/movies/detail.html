@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2 class="text-center">DETAIL</h2>
-  <h3>{{ movie.pk }} 번째 글</h3>
+  <h2 class="text-center">{{ movie.title }}</h2>
+  {% comment %} <h3>{{ movie.pk }} 번째 글</h3> {% endcomment %}
   <hr>
   <img src="{{ movie.poster_path}}"> <br>
-  <p>영화 제목: {{ movie.title }}</p>
+  {% comment %} <p>영화 제목: {{ movie.title }}</p> {% endcomment %}
   <p>내용: {{ movie.overview }}</p>
   <p>개봉일: {{ movie.release_date }}</p>
   <p>인기도: {{ movie.popularity }}</p>
@@ -18,36 +18,13 @@
   </div>
  <hr>
 
- {% comment %} <h4>댓글 목록</h4>
-  {% if movie_comments|length %}
-    <p><b>{{ movie_comments|length }}개의 댓글이 있습니다.</b></p>
-  {% endif %}
-  {% for comment in movie_comments %}
-    <div>
-      {{ comment.user }} - {{ comment.content }}
-    </div>
-  {% empty %}
-    <p><b>댓글이 없어요..</b></p>
-  {% endfor %}
-  <hr>
-  {% if request.user.is_authenticated %}
-    <form action="{% url 'movies:create_movie_comment' movie.pk %}" method="POST">
-      {% csrf_token %}
-      {{ movie_comment_form }}
-      <input type="submit">
-    </form>
-  {% else %}
-    <a href="{% url 'accounts:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
-  {% endif %}  {% endcomment %}
-
-
   <h4>댓글 목록</h4>
   <ul>
 {% for comment in movie_comments %}
   <li>
     <a href="{% url 'accounts:profile' comment.user.username %}">
       {{ comment.user }}
-    </a>- {{ comment.content }}
+    </a>- {{ comment.content }} {{ comment.RANKS.movie_rank.1 }}
 
     {% if request.user == comment.user %}
     <form style="display: inline-block;" action="{% url 'movies:delete_movie_comment' movie.pk comment.pk %}" method="POST">
@@ -70,11 +47,9 @@
 </form>
 
 {% else %}
-<form action="">
-  content: <input type="text" disabled value="댓글 쓰려면 로그인 하세요">
-</form>
+<a href="{% url 'accounts:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
+  <hr>
 {% endif %} 
 
-
-  <a href="{% url 'movies:index' %}">[back]</a>
+<a href="{% url 'movies:index' %}">[back]</a>
 {% endblock  %}

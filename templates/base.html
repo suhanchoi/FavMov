@@ -20,6 +20,8 @@
       <a href="{% url 'community:index'%}">Community</a>
       <a href="{% url 'community:create'%}">New Review</a>
       {% else %}
+      <a href="{% url 'movies:index'%}">Movie</a>
+      <a href="{% url 'community:index'%}">Community</a>
       <a href="{% url 'accounts:signup' %}">Signup</a>
       <a href="{% url 'accounts:login' %}">Login</a>
       {% endif %}

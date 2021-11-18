@@ -2,7 +2,7 @@
 
 {% block content %}
   <h2 class="text-center">DETAIL</h2>
-  <h3>{{ review.pk }} 번째 글</h3>
+  {% comment %} <h3>{{ review.pk }} 번째 글</h3> {% endcomment %}
   <hr>
   <p>제목: {{ review.title }}</p>
   <p>영화 제목: {{ review.movie_title }}</p>

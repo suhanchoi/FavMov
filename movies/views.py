@@ -35,10 +35,14 @@ def detail(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     movie_comments = movie.moviecomment_set.all()
     movie_comment_form = MovieCommentForm()
+
+    # movie_comment = get_object_or_404(MovieComment, pk=moviecomment_pk)
+    
     context = {
         'movie': movie,
         'movie_comment_form': movie_comment_form,
         'movie_comments': movie_comments,
+        'movie_rank': movie_comments.rank,
     }
     return render(request, 'movies/detail.html', context)
 
@@ -51,11 +55,13 @@ def create_movie_comment(request, movie_pk):
         movie_comment.movie = movie
         movie_comment.user = request.user
         movie_comment.save()
+        # movie_rank = movie.moviecomment_set.rank
         return redirect('movies:detail', movie.pk)
     context = {
         'movie_comment_form': movie_comment_form,
         'movie': movie,
         'movie_comments': movie.moviecomment_set.all(),
+        # 'movie_rank': movie.moviecomment_set.rank,
     }
     return render(request, 'movies/detail.html', context)
 

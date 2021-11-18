@@ -5,7 +5,7 @@
   <hr>
   {% for review in reviews %}
     <p>작성자 : <a href="{% url 'accounts:profile' review.user.username %}">{{ review.user }}</a></p>
-    <p>글 번호: {{ review.pk }}</p>
+    {% comment %} <p>글 번호: {{ review.pk }}</p> {% endcomment %}
     <p>글 제목: {{ review.title }}</p>
     <p>글 내용: {{ review.content }}</p>
     <form id="like-form" data-review-pk="{{ review.pk }}" class="d-inline">
