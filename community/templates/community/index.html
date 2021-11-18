@@ -10,7 +10,7 @@
     <p>글 내용: {{ review.content }}</p>
     
     {% if request.user.is_authenticated %}
-    
+
     <form id="like-form" data-review-pk="{{ review.pk }}" class="d-inline">
       {% csrf_token %}
       {% if user in review.like_users.all %}
@@ -20,16 +20,14 @@
       {% endif %}
     </form>
     <p  id="like-box-{{ review.pk }}"> {{ review.like_users.all|length }}명이 이 글을 좋아합니다.</p>
-    
-    {% else %}
+  
+   {% else %}
     <p  id="like-box-{{ review.pk }}"> {{ review.like_users.all|length }}명이 이 글을 좋아합니다.</p>
-    <button id="loginfirst">좋아요</button>
+    {% comment %}  배포시 수정 필요 {% endcomment %}
+    <button type="button" onclick="location.href='http://127.0.0.1:8000/accounts/login'">좋아요</button>
+     <hr>
+   {% endif %}  
 
-  <hr>
-{% endif %} 
-    </form>
-
-    
     <a href="{% url 'community:detail' review.pk %}">[DETAIL]</a>
     <hr>
   {% endfor %}
@@ -39,16 +37,8 @@
 
 {% block script %}
   <script>
-    const loginfirst = document.querySelector('#loginfirst')
-    
-    loginfirst.addEventListener('click', function (event){
-       console.log(event)
-      alert('로그인을 먼저 해주세요')
-
-    })
 
     const form_lst = document.querySelectorAll('#like-form')
-    
 
     form_lst.forEach(form => {
       const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
