@@ -13,6 +13,7 @@ class Movie(models.Model):
     overview = models.TextField()
     poster_path = models.CharField(max_length=200)
     genres = models.ManyToManyField(Genre, related_name="movies")
+    #like users 추가 
 
 class MovieComment(models.Model):
     content = models.TextField()

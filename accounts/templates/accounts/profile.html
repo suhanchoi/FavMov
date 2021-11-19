@@ -20,6 +20,23 @@
         </div>
       {% endif %}
     </div>
+    <h3> 취향 </h3>
+    <div>
+    <p> 선호하는 장르 : {{person.like_genres}}</p>
+    <p> 비선호하는 장르 : {{person.hate_genres}}</p>
+    <p> 좋아하는 영화 : {{person.like_movies}}</p>
+    </div>
+    {% comment %} 이미지 태그 활용 {% endcomment %}
+
+    {% comment %} {% if request.user != person %} {% endcomment %}
+    {% comment %} 취향이 있다면  {% endcomment %}
+    {% comment %} {% if person.like_genres %} {% endcomment %}
+      {% comment %} <a href="{% url 'accounts:fond_update' %}">취향 변경</a> {% endcomment %}
+    {% comment %} {% else %} {% endcomment %}
+      <a href="{% url 'accounts:fond_create' person.username %}">취향 생성</a>
+
+    {% comment %} {% endif %} {% endcomment %}
+    {% comment %} {% endif %} {% endcomment %}
   {% endwith %}
 {% endblock %}
 

@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from .forms import MovieCommentForm
 
 
-# Create your views here.
+# 여기다가 user의 취향에 맞게 영화 추천해주기
 @require_safe
 def index(request):
     movies = Movie.objects.all()
