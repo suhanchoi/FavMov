@@ -20,7 +20,10 @@
 
   <h4>댓글 목록</h4>
   <ul>
-{% for comment in movie_comments %}
+  {% if movie_comments|length %}
+    <p><b>{{ movie_comments|length }}개의 댓글이 있습니다.</b></p>
+  {% endif %}
+  {% for comment in movie_comments %}
   <li>
     <a href="{% url 'accounts:profile' comment.user.username %}">
       {{ comment.user }}
