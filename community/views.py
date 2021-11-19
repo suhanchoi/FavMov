@@ -35,7 +35,7 @@ def create(request):
 @require_GET
 def detail(request, review_pk):
     STARS = [
-    '',
+        '',
         '☆',
         '★',
         '★☆',

@@ -6,7 +6,7 @@ class Review(models.Model):
     title = models.CharField(max_length=100)
     movie_title = models.CharField(max_length=50)
     RANKS = [
-     (1, '☆'),
+        (1, '☆'),
         (2, '★'),
         (3, '★☆'),
         (4, '★★'),
