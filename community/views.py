@@ -34,17 +34,22 @@ def create(request):
 
 @require_GET
 def detail(request, review_pk):
-    RANKS = [
+    STARS = [
     '',
-    '★',
-    '★★',
-    '★★★',
-    '★★★★',
-    '★★★★★',
+        '☆',
+        '★',
+        '★☆',
+        '★★',
+        '★★☆',
+        '★★★',
+        '★★★☆',
+        '★★★★',
+        '★★★★☆',
+        '★★★★★'
     ]
     
     review = get_object_or_404(Review, pk=review_pk)
-    review.star = RANKS[review.rank]
+    review.star = STARS[review.rank]
     comments = review.comment_set.all()
     comment_form = CommentForm()
     context = {

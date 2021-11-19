@@ -53,8 +53,7 @@ def detail(request, movie_pk):
 
     for comment in movie_comments:
         comment.star = STARS[comment.rank]
-        print(comment.star)
-        # print(ord(comment.star))
+
     # movie_comment = get_object_or_404(MovieComment, pk=moviecomment_pk)
     
     context = {

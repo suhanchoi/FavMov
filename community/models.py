@@ -6,13 +6,18 @@ class Review(models.Model):
     title = models.CharField(max_length=100)
     movie_title = models.CharField(max_length=50)
     RANKS = [
-    (1, '★'),
-    (2, '★★'),
-    (3, '★★★'),
-    (4, '★★★★'),
-    (5, '★★★★★'),
+     (1, '☆'),
+        (2, '★'),
+        (3, '★☆'),
+        (4, '★★'),
+        (5, '★★☆'),
+        (6, '★★★'),
+        (7, '★★★☆'),
+        (8, '★★★★'),
+        (9, '★★★★☆'),
+        (10,'★★★★★'),
     ]
-    rank = models.IntegerField(choices=RANKS, default=5)
+    rank = models.IntegerField(choices=RANKS, default=10)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
