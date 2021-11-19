@@ -58,7 +58,7 @@ def detail(request, movie_pk):
         rank_sum += int(comment.rank)
         rank_cnt += 1
     if rank_cnt >= 1:
-        rank_avg = rank_sum // rank_cnt
+        rank_avg = round(rank_sum / rank_cnt,2)
     
     # movie_comment = get_object_or_404(MovieComment, pk=moviecomment_pk)
     
