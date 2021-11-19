@@ -17,12 +17,17 @@ class Movie(models.Model):
 class MovieComment(models.Model):
     content = models.TextField()
     RANKS = [
-        (1, '★'),
-        (2, '★★'),
-        (3, '★★★'),
-        (4, '★★★★'),
-        (5, '★★★★★'),
+        (1, '☆'),
+        (2, '★'),
+        (3, '★☆'),
+        (4, '★★'),
+        (5, '★★☆'),
+        (6, '★★★'),
+        (7, '★★★☆'),
+        (8, '★★★★'),
+        (9, '★★★★☆'),
+        (10,'★★★★★'),
     ]
-    rank = models.IntegerField(choices=RANKS, default=5)
+    rank = models.IntegerField(choices=RANKS, default=10)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

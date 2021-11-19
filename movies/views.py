@@ -33,13 +33,18 @@ def index(request):
 @require_safe
 def detail(request, movie_pk):
 
-    RANKS = [
+    STARS = [
         '',
+        '☆',
         '★',
+        '★☆',
         '★★',
+        '★★☆',
         '★★★',
+        '★★★☆',
         '★★★★',
-        '★★★★★',
+        '★★★★☆',
+        '★★★★★'
     ]
 
     movie = get_object_or_404(Movie, pk=movie_pk)
@@ -47,7 +52,9 @@ def detail(request, movie_pk):
     movie_comment_form = MovieCommentForm()
 
     for comment in movie_comments:
-        comment.star = RANKS[comment.rank]
+        comment.star = STARS[comment.rank]
+        print(comment.star)
+        # print(ord(comment.star))
     # movie_comment = get_object_or_404(MovieComment, pk=moviecomment_pk)
     
     context = {
