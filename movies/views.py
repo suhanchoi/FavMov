@@ -50,17 +50,23 @@ def detail(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     movie_comments = movie.moviecomment_set.all()
     movie_comment_form = MovieCommentForm()
-
+    rank_sum = 0
+    rank_cnt = 0
+    rank_avg = 0
     for comment in movie_comments:
         comment.star = STARS[comment.rank]
-
+        rank_sum += int(comment.rank)
+        rank_cnt += 1
+    if rank_cnt >= 1:
+        rank_avg = rank_sum // rank_cnt
+    
     # movie_comment = get_object_or_404(MovieComment, pk=moviecomment_pk)
     
     context = {
         'movie': movie,
         'movie_comment_form': movie_comment_form,
         'movie_comments': movie_comments,
-        'movie_comments_': movie_comments,
+        'rank_avg' : rank_avg,
     }
     return render(request, 'movies/detail.html', context)
 
