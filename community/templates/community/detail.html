@@ -7,7 +7,9 @@
   <p>제목: {{ review.title }}</p>
   <p>영화 제목: {{ review.movie_title }}</p>
   <p>내용: {{ review.content }}</p>
-  <p>평점: {{ review.rank }}</p>
+  <p> 평점: {{ review.star }} </p>
+
+  {% comment %} <p>평점: {{ comment.star }}</p> {% endcomment %}
   <p>작성 시각: {{ review.created_at }}</p>
   <p>수정 시각: {{ review.updated_at }}</p>
   <hr>
