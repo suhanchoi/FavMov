@@ -34,13 +34,24 @@ def create(request):
 
 @require_GET
 def detail(request, review_pk):
+    RANKS = [
+    '',
+    '★',
+    '★★',
+    '★★★',
+    '★★★★',
+    '★★★★★',
+    ]
+    
     review = get_object_or_404(Review, pk=review_pk)
+    review.star = RANKS[review.rank]
     comments = review.comment_set.all()
     comment_form = CommentForm()
     context = {
         'review': review,
         'comment_form': comment_form,
         'comments': comments,
+
     }
     return render(request, 'community/detail.html', context)
 
@@ -121,7 +132,4 @@ def like(request, review_pk):
             'like_count': review.like_users.count()
         }
         return JsonResponse(context)
-    else: 
-        return redirect('accounts:login')
-
-   
+    return redirect('accounts:login')
