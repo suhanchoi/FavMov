@@ -7,6 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_http_methods
 from .forms import CustomUserCreationForm
+from .forms import FondForm
 
 
 @require_http_methods(['GET', 'POST'])
@@ -51,7 +52,7 @@ def logout(request):
     auth_logout(request)
     return redirect('community:index')
 
-
+# profile 여기다가 영화 장르 정보, 영화 포스터 정보 전달
 @login_required
 def profile(request, username):
     person = get_object_or_404(get_user_model(), username=username)
@@ -81,3 +82,33 @@ def follow(request, user_pk):
             return JsonResponse(context)
         return redirect('accounts:profile', person.username)
     return render(request, 'accounts/login.html')
+
+
+# create 취향
+# 좋아하는 장르, 싫어하는 장르, 좋아하는 영화 선택
+@require_http_methods(['GET', 'POST'])
+def fond_create(request, username):
+    if request.user.is_authenticated:
+        person = get_object_or_404(get_user_model(), username=username)
+        if request.method == 'POST':
+            form = FondForm(request.POST) 
+            if form.is_valid():
+                person = form.save(commit=False)
+                person.user = request.user
+                person.save()
+                return redirect('accounts:profile', username)
+        else:
+            form = FondForm()
+        context = {
+            'form': form,
+            'username': username,
+            'person':person,
+        }
+        return render(request, 'accounts/fond_create.html', context)
+    return redirect('accounts:profile', username)
+
+
+# update 취향
+
+# delete 취향
+
