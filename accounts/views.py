@@ -58,6 +58,7 @@ def profile(request, username):
     person = get_object_or_404(get_user_model(), username=username)
     context = {
         'person': person,
+        'username':username,
     }
     return render(request, 'accounts/profile.html', context)
 
@@ -93,8 +94,11 @@ def fond_create(request, username):
         if request.method == 'POST':
             form = FondForm(request.POST) 
             if form.is_valid():
-                person = form.save(commit=False)
-                person.user = request.user
+                # person = form.save(commit=False)
+                # person.user = request.user
+                person.like_genres.add(request.POST['like_genres'])
+                person.hate_genres.add(request.POST['hate_genres'])
+                person.like_movies.add(request.POST['like_movies'])
                 person.save()
                 return redirect('accounts:profile', username)
         else:

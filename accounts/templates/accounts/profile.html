@@ -21,10 +21,31 @@
       {% endif %}
     </div>
     <h3> 취향 </h3>
-    <div>
-    <p> 선호하는 장르 : {{person.like_genres}}</p>
-    <p> 비선호하는 장르 : {{person.hate_genres}}</p>
-    <p> 좋아하는 영화 : {{person.like_movies}}</p>
+    
+    <p>
+      <div> 선호하는 장르 :
+        {% for genre in person.like_genres.all %}
+          < {{ genre }} >
+        {% endfor%}
+      </div>
+    </p>
+
+    <p>
+     <div> 비선호하는 장르 :
+        {% for genre in person.hate_genres.all %}
+         < {{ genre }} >
+        {% endfor%}
+      </div>
+    </p>
+
+    <p>
+      <div> 좋아하는 영화 :
+        {% for movie in person.like_movies.all %}
+          < {{ movie }} >
+        {% endfor%}
+      </div>
+    </p>
+
     </div>
     {% comment %} 이미지 태그 활용 {% endcomment %}
 
