@@ -9,9 +9,9 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('<username>/', views.profile, name='profile'),
     path('<username>/fond_create', views.fond_create, name='fond_create'),
-    # path('<username>/fond_update', views.fond_update, name='fond_update'),
+    path('<username>/fond_update', views.fond_update, name='fond_update'),
     path('<username>/fond_delete', views.fond_delete, name='fond_delete'),
     path('<int:user_pk>/follow/', views.follow, name='follow'),
 ]
 
-# create 취향, update 취향 설정, delete 추가 
+# update 취향 설정, delete 추가 

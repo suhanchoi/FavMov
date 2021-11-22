@@ -14,4 +14,4 @@ class FondForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['like_genres', 'hate_genres','like_movies']
+        fields = ['like_genres', 'hate_genres', 'like_movies']

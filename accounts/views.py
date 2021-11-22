@@ -92,14 +92,25 @@ def fond_create(request, username):
     if request.user.is_authenticated:
         person = get_object_or_404(get_user_model(), username=username)
         if request.method == 'POST':
-            form = FondForm(request.POST) 
+            form = FondForm(request.POST)
+             
             if form.is_valid():
-                # person = form.save(commit=False)
-                # person.user = request.user
-                person.like_genres.add(request.POST['like_genres'])
-                person.hate_genres.add(request.POST['hate_genres'])
-                person.like_movies.add(request.POST['like_movies'])
+                myquery = dict(request.POST)
+
+                if 'like_genres' in myquery:
+                    for i in range(len(myquery['like_genres'])):
+                        person.like_genres.add(myquery['like_genres'][i])
+
+                if 'hate_genres' in myquery:
+                    for i in range(len(myquery['hate_genres'])):
+                        person.hate_genres.add(myquery['hate_genres'][i])
+
+                if 'like_movies' in myquery:
+                    for i in range(len(myquery['like_movies'])):
+                        person.like_movies.add(myquery['like_movies'][i])
+
                 person.save()
+        
                 return redirect('accounts:profile', username)
         else:
             form = FondForm()
@@ -113,6 +124,44 @@ def fond_create(request, username):
 
 
 # update 취향
+
+@require_http_methods(['GET', 'POST'])
+def fond_update(request, username):
+    if request.user.is_authenticated:
+        person = get_object_or_404(get_user_model(), username=username)
+        if request.method == 'POST':
+            form = FondForm(request.POST, instance=person) 
+            if form.is_valid():
+                person.like_genres.clear()
+                person.hate_genres.clear()
+                person.like_movies.clear()
+
+                myquery = dict(request.POST)
+
+                if 'like_genres' in myquery:
+                    for i in range(len(myquery['like_genres'])):
+                        person.like_genres.add(myquery['like_genres'][i])
+
+                if 'hate_genres' in myquery:
+                    for i in range(len(myquery['hate_genres'])):
+                        person.hate_genres.add(myquery['hate_genres'][i])
+
+                if 'like_movies' in myquery:
+                    for i in range(len(myquery['like_movies'])):
+                        person.like_movies.add(myquery['like_movies'][i])
+
+                person.save()
+
+                return redirect('accounts:profile', username)
+        else:
+            form = FondForm(instance=person)
+        context = {
+            'form': form,
+            'username': username,
+            'person':person,
+        }
+        return render(request, 'accounts/fond_update.html', context)
+    return redirect('accounts:profile', username)
 
 # delete 취향
 @require_http_methods(['GET', 'POST'])
