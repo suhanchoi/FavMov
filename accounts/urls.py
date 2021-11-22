@@ -10,6 +10,7 @@ urlpatterns = [
     path('<username>/', views.profile, name='profile'),
     path('<username>/fond_create', views.fond_create, name='fond_create'),
     # path('<username>/fond_update', views.fond_update, name='fond_update'),
+    path('<username>/fond_delete', views.fond_delete, name='fond_delete'),
     path('<int:user_pk>/follow/', views.follow, name='follow'),
 ]
 

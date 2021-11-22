@@ -115,4 +115,13 @@ def fond_create(request, username):
 # update 취향
 
 # delete 취향
-
+@require_http_methods(['GET', 'POST'])
+def fond_delete(request, username):
+    if request.user.is_authenticated:
+        person = get_object_or_404(get_user_model(), username=username)
+        if person == request.user:
+            person.like_genres.clear()
+            person.hate_genres.clear()
+            person.like_movies.clear()
+        return redirect('accounts:profile', username)
+    return redirect('accounts:profile', username)
