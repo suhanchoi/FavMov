@@ -24,7 +24,7 @@
    {% else %}
     <p  id="like-box-{{ review.pk }}"> {{ review.like_users.all|length }}명이 이 글을 좋아합니다.</p>
     {% comment %}  배포시 수정 필요 {% endcomment %}
-    <button type="button" onclick="location.href='http://127.0.0.1:8000/accounts/login'">좋아요</button>
+    <button type="button" onclick="location.href='{% url 'accounts:login' %}'">좋아요</button>
      <hr>
    {% endif %}  
 
