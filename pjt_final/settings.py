@@ -131,6 +131,7 @@ AUTH_USER_MODEL = 'accounts.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEBUG = True
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # import os 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
