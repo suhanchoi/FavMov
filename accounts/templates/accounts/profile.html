@@ -20,8 +20,9 @@
         </div>
       {% endif %}
     </div>
-    <h3> 취향 </h3>
-    
+    <div class="MyFavMov">
+    <h3> My FavMov </h3>
+    </div>
     <p>
       <div> 선호하는 장르 :
         {% if person.like_genres.all %}
@@ -58,16 +59,17 @@
       </div>
     </p>
 
-    </div>
+    
     {% comment %} 이미지 태그 활용 {% endcomment %}
 
+  
     {% if person.like_genres.all or person.hate_genres.all or person.like_movies.all %}
-      <ul> <a href="{% url 'accounts:fond_update' person.username %}">취향 변경</a> </ul>
+      <ul> <a href="{% url 'accounts:fond_update' person.username %}" class="btn btn-outline-dark">취향 변경</a> </ul>
     {% else %}
-      <ul> <a href="{% url 'accounts:fond_create' person.username %}">취향 생성</a> </ul>
+      <ul> <a href="{% url 'accounts:fond_create' person.username %}" class="btn btn-outline-dark">취향 생성</a> </ul>
     {% endif %}
-     <ul> <a href="{% url 'accounts:fond_delete' person.username %}">취향 삭제</a> </ul>
-
+     <ul> <a href="{% url 'accounts:fond_delete' person.username %}" class="btn btn-outline-dark">취향 삭제</a> </ul>
+  
   {% endwith %}
 {% endblock %}
 
