@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-blksf07j+j1f_aj0@65z+edg!&0h0$9#@v_^7=ln()$w%xnz!0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+
 
 ALLOWED_HOSTS = []
 
@@ -120,10 +120,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-# STATIC_URL = '/static/'
-import os 
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -131,7 +129,10 @@ AUTH_USER_MODEL = 'accounts.User'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEBUG = True
+STATIC_URL = '/static/'
 
-DEBUG = False
-
-ALLOWED_HOSTS = [ 'favmov.pythonanywhere.com' ]
+# import os 
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# DEBUG = False
+# ALLOWED_HOSTS = [ 'favmov.pythonanywhere.com' ]
