@@ -129,15 +129,15 @@ AUTH_USER_MODEL = 'accounts.User'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_URL = '/static/'
 
+
+### 배포시 수정
 
 # DEBUG = True
-STATIC_URL = '/static/'
 # STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 import os 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 DEBUG = False
 ALLOWED_HOSTS = [ 'favmov.pythonanywhere.com' ]
-
-
