@@ -10,7 +10,13 @@
   <p>개봉일: {{ movie.release_date }}</p>
   <p>인기도: {{ movie.popularity }}</p>
   <p>투표수: {{ movie.vote_count }}</p>
+  
+  {% if movie_comments|length %}
+    <p>평점: {{ rank_avg }}</p>
+  {% else %}
   <p>평점: {{ movie.vote_average }}</p>
+  {% endif %}
+
   <div>장르:
     {% for genre in movie.genres.all %}
       {{genre.name}}
@@ -20,21 +26,20 @@
  <hr>
 
   <h4>댓글 목록</h4>
-  평점 평균 : {{ rank_avg }}
   <ul>
   {% if movie_comments|length %}
     <p><b>{{ movie_comments|length }}개의 댓글이 있습니다.</b></p>
   {% endif %}
   {% for comment in movie_comments %}
   <li>
-    <a href="{% url 'accounts:profile' comment.user.username %}">
+    <a href="{% url 'accounts:profile' comment.user.username %}" class="name_button">
       {{ comment.user }}
     </a>- {{ comment.content }} {{ comment.star }}
 
     {% if request.user == comment.user %}
     <form style="display: inline-block;" action="{% url 'movies:delete_movie_comment' movie.pk comment.pk %}" method="POST">
       {% csrf_token %}
-      <button>[X]</button>
+      <button class="btn btn-outline-dark">[X]</button>
     </form>
     {% endif %}
   </li>
@@ -48,7 +53,7 @@
 <form action="{% url 'movies:create_movie_comment' movie.pk %}" method="POST">
   {% csrf_token %}  
   {{ movie_comment_form }}
-  <button>comment</button>
+  <button class="btn btn-outline-dark">comment</button>
 </form>
 
 {% else %}
@@ -56,5 +61,5 @@
   <hr>
 {% endif %} 
 
-<a href="{% url 'movies:index' %}">[back]</a>
+<a href="{% url 'movies:index' %}" class="btn btn-outline-dark">[back]</a>
 {% endblock  %}
