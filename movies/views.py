@@ -20,6 +20,8 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    rec_movies = Movie.objects.none()
+
     username = request.user.username
     if request.user.is_authenticated:
         person = get_object_or_404(get_user_model(), username=username)
@@ -37,6 +39,8 @@ def index(request):
         
         if person.like_movies.all():
             like_movies = person.like_movies.all()
+
+        
 
 
         # 취향 중 좋아하는 장르가 있다면, 해당 Genre QuerySet 생성
