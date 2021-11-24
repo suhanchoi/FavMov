@@ -5,8 +5,8 @@
   <form action="" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit">
+    <input type="submit" class="btn btn-outline-dark">
   </form>
   <hr>
-  <a href="{% url 'community:index' %}">[back]</a>
+  <a href="{% url 'community:index' %}" class="btn btn-outline-dark">[back]</a>
 {% endblock %}

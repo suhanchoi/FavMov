@@ -27,14 +27,14 @@
   {% endif %}
   {% for comment in movie_comments %}
   <li>
-    <a href="{% url 'accounts:profile' comment.user.username %}">
+    <a href="{% url 'accounts:profile' comment.user.username %}" class="name_button">
       {{ comment.user }}
     </a>- {{ comment.content }} {{ comment.star }}
 
     {% if request.user == comment.user %}
     <form style="display: inline-block;" action="{% url 'movies:delete_movie_comment' movie.pk comment.pk %}" method="POST">
       {% csrf_token %}
-      <button>[X]</button>
+      <button class="btn btn-outline-dark">[X]</button>
     </form>
     {% endif %}
   </li>
@@ -48,7 +48,7 @@
 <form action="{% url 'movies:create_movie_comment' movie.pk %}" method="POST">
   {% csrf_token %}  
   {{ movie_comment_form }}
-  <button>comment</button>
+  <button class="btn btn-outline-dark">comment</button>
 </form>
 
 {% else %}
@@ -56,5 +56,5 @@
   <hr>
 {% endif %} 
 
-<a href="{% url 'movies:index' %}">[back]</a>
+<a href="{% url 'movies:index' %}" class="btn btn-outline-dark">[back]</a>
 {% endblock  %}
