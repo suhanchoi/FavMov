@@ -14,28 +14,7 @@ from .forms import MovieCommentForm
 @require_safe
 def index(request):
 
-    # genres_id= {12: '모험' , 
-    #             '판타지':14, 
-    #             '애니메이션': 16, 
-    #             '드라마':18 , 
-    #             '공포': 27,
-    #             '액션':28 ,
-    #             '코미디':35,
-    #             '역사':36 ,
-    #             '서부': 37,
-    #             '스릴러': 53,
-    #             '범죄':80 ,
-    #             '다큐멘터리': 99,
-    #             'SF': 878,
-    #             '미스터리': 9648,
-    #             '음악': 10402,
-    #             '로맨스': 10749,
-    #             '가족': 10751,
-    #             '전쟁': 10752,
-    #             'TV 영화': 10770
-    #             }
-
-    movies = Movie.objects.all()
+    movies = Movie.objects.all().order_by('-vote_average','-vote_count')
     paginator = Paginator(movies, 10)
 
     page_number = request.GET.get('page')
@@ -59,12 +38,6 @@ def index(request):
         if person.like_movies.all():
             like_movies = person.like_movies.all()
 
-        # !!!!!!!!!!중요!!!!!!!!!
-        # Movies/detail 평점 댓글이 있다면, 원래 영화 평점을 대체하고 평점 순으로 정렬
-        # !!!!!!!!!!중요!!!!!!!!!
-
-        # 조건문 or 으로 취향이 있는지 없는지 확인 한 후 
-        # 각 장르 수를 잘 따져서 영화 평점 기준 출력 
 
         # 취향 중 좋아하는 장르가 있다면, 해당 Genre QuerySet 생성
         if like_genres != 0:
@@ -118,8 +91,6 @@ def index(request):
             rec_movies = Movie.objects.none()
             for i in range(len(like_genres_QS)):
                 in_movies = (Movie.objects.filter(genres=f'{like_genres_QS[i].id}'))
-                # for j in range(len(hate_genres)): # in_movies 에서 싫어하는 장르 빼고 난 후 
-                #     in_movies = in_movies.exclude(genres=f'{hate_genres[j].id}')
                 in_movies = in_movies.distinct()
                 rec_movies = rec_movies.union(in_movies)
 
@@ -129,9 +100,9 @@ def index(request):
                 in_movies = (Movie.objects.filter(genres=f'{like_movies_genres_QS[i].id}'))
                 for j in range(len(hate_genres)): # in_movies 에서 싫어하는 장르 빼고 난 후 
                     in_movies = in_movies.exclude(genres=f'{hate_genres[j].id}')
+                # 선호하는 영화 겹치는 항목 제거
                 for j in range(len(like_movies)):
                     in_movies = in_movies.exclude(id=f'{like_movies[j].id}')
-                    # print('겹치는 영화 제거 in_movies',in_movies)
                 rec_movies = rec_movies.union(in_movies)
 
         # 만약 취향 중 싫어하는 장르만 있다면, Movie 평점 순으로 불러온 후, 삭제
@@ -141,12 +112,12 @@ def index(request):
                 for i in range(len(hate_genres)):
                     rec_movies = rec_movies.exclude(genres=f'{hate_genres[i].id}')
 
-        # rec_movies = rec_movies.order_by('vote_average')
-        
+        rec_movies = rec_movies.order_by('-vote_average','-vote_count') # 정렬
         rec_movies = rec_movies[:6] # 갯수 할당 
 
         print('rec_movies',rec_movies)
         print('hate_genres',hate_genres)
+
         # 추천 영화들 장르와 취향 추천 장르들 출력 후 비교
         for i in range(len(rec_movies)):
             print('recommend_movie', rec_movies[i].genres.all())
@@ -161,9 +132,11 @@ def index(request):
         elif like_movies != 0:
             print('like_movies_genres_QS',like_movies_genres_QS)
 
-
+    # 만약 추천 영화가 아무것도 없다면, 
     if len(rec_movies) == 0:
-        rec_movies
+        rec_movies = Movie.objects.all().order_by('-vote_average','-vote_count')
+        rec_movies = rec_movies[:6] # 갯수 할당 
+    
     # /movies/?page=2 ajax 요청 => json
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data = serializers.serialize('json', page_obj)
@@ -207,6 +180,9 @@ def detail(request, movie_pk):
         rank_cnt += 1
     if rank_cnt >= 1:
         rank_avg = round(rank_sum / rank_cnt,2)
+
+        movie.vote_average = rank_avg
+        movie.save()
     
     context = {
         'movie': movie,
