@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>취향 변경</h1>
+{% comment %} <form action="" method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit">
+</form> {% endcomment %}
+
+{% if request.user.is_authenticated %}
+    <form action="{% url 'accounts:fond_update' username %}" method="POST">
+      {% csrf_token %}
+      {{ form }}
+      <input type="submit">
+    </form>
+  {% else %}
+    <a href="{% url 'accounts:login' %}">[취향을 생성하려면 로그인하세요.]</a>
+  {% endif %}
+  <a href="{% url 'accounts:profile' person.username %}">[back]</a>
+
+{% endblock  %}
