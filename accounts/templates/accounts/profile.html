@@ -68,12 +68,22 @@
     {% else %}
       <ul> <a href="{% url 'accounts:fond_create' person.username %}" class="btn btn-outline-dark">취향 생성</a> </ul>
     {% endif %}
+<<<<<<< HEAD
      
 
 
     {% comment %} 썼던 평점 댓글, 썼든 게시글 출력 {% endcomment %}
      <ul> <a href="{% url 'accounts:fond_delete' person.username %}" class="btn btn-outline-dark">취향 삭제</a> </ul>
   
+=======
+     <ul> <a href="{% url 'accounts:fond_delete' person.username %}">취향 삭제</a> </ul>
+
+
+    {% comment %} 썼던 평점 댓글, 썼든 게시글 출력 {% endcomment %}
+
+
+
+>>>>>>> cb93e168513d41728d488c5e9e94ef9163eba944
   {% endwith %}
 {% endblock %}
 
