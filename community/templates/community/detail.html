@@ -13,32 +13,38 @@
   <p>작성 시각: {{ review.created_at }}</p>
   <p>수정 시각: {{ review.updated_at }}</p>
 
+  
   {% if user == review.user %}
-    <a href="{% url 'community:update' review.pk %}">[UPDATE]</a>
+    <div class="detailpage">
+    <a href="{% url 'community:update' review.pk %}" class="btn btn-outline-dark">[UPDATE]</a>
+    </div>
+    <div class="detailpage">   
     <form action="{% url 'community:delete' review.pk %}" method="POST">
       {% csrf_token %}
-      <input type="submit" value="DELETE">
+      <input type="submit" value="DELETE" class="btn btn-outline-dark">
     </form>
+     </div>
   {% endif %}
-
-    {% if request.user.is_authenticated %}
-    <form id="like-form" data-review-pk="{{ review.pk }}" class="d-inline">
-      {% csrf_token %}
-      {% if user in review.like_users.all %}
-        <button id="like-{{ review.pk }}">좋아요 취소</button>
-      {% else %}
-        <button id="like-{{ review.pk }}">좋아요</button>
-      {% endif %}
-    </form>
-    <p  id="like-box-{{ review.pk }}"> {{ review.like_users.all|length }}명이 이 글을 좋아합니다.</p>
-  
-   {% else %}
-    <p  id="like-box-{{ review.pk }}"> {{ review.like_users.all|length }}명이 이 글을 좋아합니다.</p>
-    {% comment %}  배포시 수정 필요 {% endcomment %}
-    <button onclick = "location.href= '{% url 'accounts:login' %}'">좋아요</button>
-     <hr>
-   {% endif %} 
-   
+ 
+  <div class="detailpage">
+      {% if request.user.is_authenticated %}
+      <form id="like-form" data-review-pk="{{ review.pk }}" class="d-inline">
+        {% csrf_token %}
+        {% if user in review.like_users.all %}
+          <button id="like-{{ review.pk }}" class="btn btn-outline-dark">좋아요 취소</button>
+        {% else %}
+          <button id="like-{{ review.pk }}" class="btn btn-outline-dark">좋아요</button>
+        {% endif %}
+      </form>
+      <p  id="like-box-{{ review.pk }}"> {{ review.like_users.all|length }}명이 이 글을 좋아합니다.</p>
+    
+    {% else %}
+      <p  id="like-box-{{ review.pk }}"> {{ review.like_users.all|length }}명이 이 글을 좋아합니다.</p>
+      {% comment %}  배포시 수정 필요 {% endcomment %}
+      <button onclick = "location.href= '{% url 'accounts:login' %}'">좋아요</button>
+      <hr>
+    {% endif %} 
+  </div>
   <hr>
 
   <h4>댓글 목록</h4>
@@ -47,13 +53,13 @@
   {% endif %}
   {% for comment in comments %}
     <div>
-       <a href="{% url 'accounts:profile' comment.user.username %}">
+       <a href="{% url 'accounts:profile' comment.user.username %}" class="name_button">
       {{ comment.user }}
     </a>- {{ comment.content }}
       {% if user == comment.user %}
           <form action="{% url 'community:comments_delete' review.pk comment.pk %}" method="POST" class="d-inline">
             {% csrf_token %}
-            <input type="submit" value="DELETE">
+            <input type="submit" value="DELETE" class="btn btn-outline-dark">
           </form>
         {% endif %}
     </div>
@@ -65,12 +71,13 @@
     <form action="{% url 'community:create_comment' review.pk %}" method="POST">
       {% csrf_token %}
       {{ comment_form }}
-      <input type="submit">
+      <input type="submit" class="btn btn-outline-dark">
     </form>
   {% else %}
     <a href="{% url 'accounts:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
   {% endif %}
-  <a href="{% url 'community:index' %}">[back]</a>
+  <hr>
+  <a href="{% url 'community:index' %}" class="btn btn-outline-dark">[back]</a>
 
 
 {% endblock  %}
