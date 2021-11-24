@@ -68,6 +68,11 @@
     {% endif %}
      <ul> <a href="{% url 'accounts:fond_delete' person.username %}">취향 삭제</a> </ul>
 
+
+    {% comment %} 썼던 평점 댓글, 썼든 게시글 출력 {% endcomment %}
+
+
+
   {% endwith %}
 {% endblock %}
 
