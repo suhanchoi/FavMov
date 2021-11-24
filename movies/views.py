@@ -35,7 +35,6 @@ def index(request):
     #             'TV 영화': 10770
     #             }
 
-
     movies = Movie.objects.all()
     paginator = Paginator(movies, 10)
 
@@ -60,91 +59,92 @@ def index(request):
         if person.like_movies.all():
             like_movies = person.like_movies.all()
 
-        
-        print('++++++++++++++++++++++++++**********************************************+++++++++++++++++++*********************************************+++++++++++++++++++*********************************************')
-
         # !!!!!!!!!!중요!!!!!!!!!
         # Movies/detail 평점 댓글이 있다면, 원래 영화 평점을 대체하고 평점 순으로 정렬
         # !!!!!!!!!!중요!!!!!!!!!
 
-
         # 조건문 or 으로 취향이 있는지 없는지 확인 한 후 
-        # union 으로 장르 쿼리를 합치고 hate_genres를 제외한 후 
         # 각 장르 수를 잘 따져서 영화 평점 기준 출력 
-        # 최종 영화 출력은 몇개로 할건지?
 
         # 취향 중 좋아하는 장르가 있다면, 해당 Genre QuerySet 생성
         if like_genres != 0:
             like_genres_QS = like_genres
 
             # 만약 싫어하는 장르가 겹치면 QuerySet에서 삭제
-            for i in range(len(hate_genres)):
-                like_genres_QS = like_genres_QS.exclude(id=f'{hate_genres[i].id}')
+            if hate_genres != 0:
+                for i in range(len(hate_genres)):
+                    like_genres_QS = like_genres_QS.exclude(id=f'{hate_genres[i].id}')
 
         # 취향에서 선호하는 영화가 있다면, 해당 Movie 에 맞는 Genre QuerySet 생성
         if like_movies != 0:
             like_movies_genres_QS = Genre.objects.none() # 좋아하는 영화들의 장르들
-        
+
             for i in range(len(like_movies)):
                 like_movies_genres_QS_filtered = like_movies[i].genres.all()
                 for k in range(len(like_movies[i].genres.all())):
-                    for j in range(len(hate_genres)):
-                        if like_movies[i].genres.all()[k].id == hate_genres[j].id:
-                            like_movies_genres_QS_filtered = like_movies_genres_QS_filtered.exclude(id=f'{hate_genres[j].id}')
+                    if hate_genres != 0:
+                        for j in range(len(hate_genres)):
+                            if like_movies[i].genres.all()[k].id == hate_genres[j].id:
+                                like_movies_genres_QS_filtered = like_movies_genres_QS_filtered.exclude(id=f'{hate_genres[j].id}')
                 like_movies_genres_QS = like_movies_genres_QS.union(like_movies_genres_QS_filtered)
-        
 
         # 취향 중 싫어 하는 장르가 있다면, 위 Genre QuerySet에서 삭제 
 
         # 둘 다 있다면, 위 QuerySet Union 후, 최종 Movie QuerySet 생성
         if like_genres!= 0 and like_movies != 0 :
-            print(1)
             union_like_QS = like_genres_QS.union(like_movies_genres_QS) # 결합
-            print(union_like_QS)
-            rec_movies = Genre.objects.none()
+            rec_movies = Movie.objects.none()
             for i in range(len(union_like_QS)):
-                rec_movies = Movie.objects.filter(genres=f'{union_like_QS[i].id}').union(rec_movies)
-                # print('***Movie',(Movie.objects.filter(genres=f'{union_like_QS[i].id}')))
-                # print(f'{union_like_QS[i].id}')
-                # print('rec_movies',rec_movies)
+                in_movies = (Movie.objects.filter(genres=f'{union_like_QS[i].id}'))
+                if hate_genres != 0:
+                    for j in range(len(hate_genres)): # in_movies 에서 싫어하는 장르 빼고 난 후 
+                        in_movies = in_movies.exclude(genres=f'{hate_genres[j].id}')
+                in_movies = in_movies.distinct()
+                # like_movies 와 겹치는 영화 제거
+                for j in range(len(like_movies)):
+                    in_movies = in_movies.exclude(id=f'{like_movies[j].id}')
 
-            # for i in range(len(hate_genres)):
-            #         rec_movies = rec_movies.exclude(genres=f'{hate_genres[i].id}')
-            
+                rec_movies = rec_movies.union(in_movies)
+                # rec_movies = rec_movies.order_by('vote_average').distinct()\
+
             # 만약 취향 중 싫어하는 장르가 좋아하는 장르와 영화를 모두 삭제시킨 경우, 
             if len(rec_movies) == 0:
                 rec_movies = Movie.objects.all()
-                for i in range(len(hate_genres)):
-                    rec_movies = rec_movies.exclude.filter(genres=f'{hate_genres[i].id}')
-
+                if hate_genres != 0:
+                    for i in range(len(hate_genres)):
+                        rec_movies = rec_movies.exclude(genres=f'{hate_genres[i].id}')
+        
         elif like_genres != 0:
-            print(2)
-            rec_movies = Movie.objects.Movie.objects.none()
+            rec_movies = Movie.objects.none()
             for i in range(len(like_genres_QS)):
-                rec_movies = rec_movies.union(Movie.objects.filter(genres=f'{like_genres_QS[i].id}'))
-            # for i in range(len(hate_genres)):
-            #     rec_movies = rec_movies.exclude(genres=f'{hate_genres[i].id}')
+                in_movies = (Movie.objects.filter(genres=f'{like_genres_QS[i].id}'))
+                # for j in range(len(hate_genres)): # in_movies 에서 싫어하는 장르 빼고 난 후 
+                #     in_movies = in_movies.exclude(genres=f'{hate_genres[j].id}')
+                in_movies = in_movies.distinct()
+                rec_movies = rec_movies.union(in_movies)
 
         elif like_movies != 0:
-            print(3)
             rec_movies = Movie.objects.none()
             for i in range(len(like_movies_genres_QS)):
-                rec_movies = rec_movies.union(Movie.objects.filter(genres=f'{like_movies_genres_QS[i].id}'))
-            # for i in range(len(hate_genres)):
-            #     rec_movies = rec_movies.exclude(genres=f'{hate_genres[i].id}')
+                in_movies = (Movie.objects.filter(genres=f'{like_movies_genres_QS[i].id}'))
+                for j in range(len(hate_genres)): # in_movies 에서 싫어하는 장르 빼고 난 후 
+                    in_movies = in_movies.exclude(genres=f'{hate_genres[j].id}')
+                for j in range(len(like_movies)):
+                    in_movies = in_movies.exclude(id=f'{like_movies[j].id}')
+                    # print('겹치는 영화 제거 in_movies',in_movies)
+                rec_movies = rec_movies.union(in_movies)
 
         # 만약 취향 중 싫어하는 장르만 있다면, Movie 평점 순으로 불러온 후, 삭제
         else :
-            print(4)
             rec_movies = Movie.objects.all()
-            print(rec_movies)
-            for i in range(1):
-                rec_movies = rec_movies.exclude(genres=f'{hate_genres[i].id}')
+            if hate_genres != 0:
+                for i in range(len(hate_genres)):
+                    rec_movies = rec_movies.exclude(genres=f'{hate_genres[i].id}')
 
-        # print(rec_movies)
-        # rec_movies = rec_movies.order_by('vote_average').distinct()
-        rec_movies = rec_movies[:6] # 갯수 할당 # 이때 삭제??
-    
+        # rec_movies = rec_movies.order_by('vote_average')
+        
+        rec_movies = rec_movies[:6] # 갯수 할당 
+
         print('rec_movies',rec_movies)
         print('hate_genres',hate_genres)
         # 추천 영화들 장르와 취향 추천 장르들 출력 후 비교
@@ -162,9 +162,8 @@ def index(request):
             print('like_movies_genres_QS',like_movies_genres_QS)
 
 
-
-    # 3
-
+    if len(rec_movies) == 0:
+        rec_movies
     # /movies/?page=2 ajax 요청 => json
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         data = serializers.serialize('json', page_obj)
@@ -245,12 +244,5 @@ def delete_movie_comment(request, movie_pk, moviecomment_pk):
         movie_comment.delete()
     return redirect('movies:detail', movie.pk)
 
-
-
-
-@require_safe
-def recommended(request):
-    if request.user.is_authenticated:
-        pass
 
 
