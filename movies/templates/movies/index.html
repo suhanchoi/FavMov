@@ -126,7 +126,7 @@
       <div class="movie">
         <h3>{{ movie.title }}</h3>
         <p>{{ movie.overview }}</p>
-        <a href="{% url 'movies:detail' movie.pk %}">[detail]</a>
+        <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-outline-dark">[detail]</a>
         <hr>
       </div>
     {% endfor %}
