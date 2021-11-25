@@ -41,6 +41,27 @@
   <br>
   <br>
     <div class="profile_total">
+      {% comment %} 썼던 평점 댓글, 게시글 출력 {% endcomment %}
+      <p> 작성한 게시글 </p>
+      {% if reviews|length %}
+      {% for review in reviews  %}
+      {{ review.title }}
+      {% endfor %}
+      {% else %}
+        <p> 작성한 게시글이 없습니다. </p>
+      {% endif %}
+      <br>
+      <br>
+      <p> 작성한 댓글 </p>
+      {% if comments|length %}
+      {% for comment in comments  %}
+      {{ comment.content }} : {{ comment.rank }}
+      {% endfor %}
+        {% else %}
+        <p> 작성한 댓글이 없습니다. </p>
+      {% endif %}
+      <br>
+      <br>
       <div> 선호하는 장르 :
         {% if person.like_genres.all %}
           {% for genre in person.like_genres.all %}
@@ -94,24 +115,7 @@
 
   
 
-  {% comment %} 썼던 평점 댓글, 게시글 출력 {% endcomment %}
-  <p> 작성한 게시글 </p>
-  {% if reviews|length %}
-  {% for review in reviews  %}
-   {{ review.title }}
-  {% endfor %}
-  {% else %}
-    <p> 작성한 게시글이 없습니다. </p>
-  {% endif %}
 
-  <p> 작성한 댓글 </p>
-   {% if comments|length %}
-  {% for comment in comments  %}
-   {{ comment.content }} : {{ comment.rank }}
-  {% endfor %}
-    {% else %}
-    <p> 작성한 댓글이 없습니다. </p>
-  {% endif %}
 
   {% endwith %}
 {% endblock %}
