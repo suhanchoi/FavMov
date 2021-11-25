@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-  <h1>Movies</h1>
+  <h1>Recent Movies</h1>
 
   <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
@@ -78,7 +78,7 @@
     </div>
     {% endfor %}
   </div>
-
+  <div class="line_sum">
   {% if request.user.is_authenticated %}
     {% if username == request.user.username %}
       {% if person.like_genres.all or person.hate_genres.all or person.like_movies.all %}
@@ -89,20 +89,12 @@
       <ul> <a href="{% url 'accounts:fond_delete' person.username %}" class="btn btn-outline-dark">취향 삭제</a> </ul>
     {% endif %}
   {% endif %}
-
-  <div class="fav_genres">
-  <h3> 취향에 따른 영화 추천 </h3>
   </div>
-  <div class="movie-list">
-    {% for movie in rec_movies %}
-      <div class="movie">
-        <h3>{{ movie.title }}</h3>
-        <p>{{ movie.overview }}</p>
-        <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-outline-dark">[detail]</a>
-        <hr>
-      </div>
-    {% endfor %}
-  </div>
+  <br>
+  <br>
+<div class="bottom_gap">
+<h4>▸ 영화 목록</h4>
+</div>
   <div>
     {% for movie in movies %}
       <div class="movie">
