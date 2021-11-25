@@ -51,7 +51,8 @@
       <div> 좋아하는 영화 :
         {% if person.like_movies.all %}
           {% for movie in person.like_movies.all %}
-            < {{ movie }} >
+            <img src = "{{ movie.poster_path }}" > 
+            < {{ movie.title }} >
           {% endfor%}
         {% else %}
           <p>좋아하는 영화가 없습니다.</p>
@@ -59,21 +60,22 @@
       </div>
     </p>
 
-    
     {% comment %} 이미지 태그 활용 {% endcomment %}
 
-  
-    {% if person.like_genres.all or person.hate_genres.all or person.like_movies.all %}
-      <ul> <a href="{% url 'accounts:fond_update' person.username %}" class="btn btn-outline-dark">취향 변경</a> </ul>
-    {% else %}
-      <ul> <a href="{% url 'accounts:fond_create' person.username %}" class="btn btn-outline-dark">취향 생성</a> </ul>
+    {% if request.user.is_authenticated %}
+      {% if username == request.user.username %}
+        {% if person.like_genres.all or person.hate_genres.all or person.like_movies.all %}
+          <ul> <a href="{% url 'accounts:fond_update' person.username %}" class="btn btn-outline-dark">취향 변경</a> </ul>
+        {% else %}
+          <ul> <a href="{% url 'accounts:fond_create' person.username %}" class="btn btn-outline-dark">취향 생성</a> </ul>
+        {% endif %}
+      <ul> <a href="{% url 'accounts:fond_delete' person.username %}" class="btn btn-outline-dark">취향 삭제</a> </ul>
     {% endif %}
-     
-
-
-    {% comment %} 썼던 평점 댓글, 썼든 게시글 출력 {% endcomment %}
-     <ul> <a href="{% url 'accounts:fond_delete' person.username %}" class="btn btn-outline-dark">취향 삭제</a> </ul>
+  {% endif %}
   
+
+  {% comment %} 썼던 평점 댓글, 게시글 출력 {% endcomment %}
+
   {% endwith %}
 {% endblock %}
 
