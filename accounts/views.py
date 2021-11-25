@@ -77,9 +77,6 @@ def profile(request, username):
 
     person = get_object_or_404(get_user_model(), username = username)
     comments = MovieComment.objects.filter(user_id = person.id)
-    # comments.star = STARS[comments.rank]
-
-    print('comments[0].rank',comments[0].rank)
 
     for i in range (len(comments)) :
         comments[i].star = STARS[comments[i].rank]
