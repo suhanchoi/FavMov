@@ -72,11 +72,15 @@
 </ul>
 
 {% if request.user.is_authenticated %}
+{% if no_more_comment %}
+  <p> 평점 댓글 작성은 한개만 가능합니다.</p>
+{% else %}
 <form action="{% url 'movies:create_movie_comment' movie.pk %}" method="POST">
   {% csrf_token %}  
   {{ movie_comment_form }}
   <button class="btn btn-outline-dark">comment</button>
 </form>
+{% endif %}
 
 {% else %}
 <a href="{% url 'accounts:login' %}" class="btn btn-outline-dark">댓글을 작성하려면 로그인하세요.</a>
