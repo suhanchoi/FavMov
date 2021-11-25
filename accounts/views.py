@@ -77,9 +77,10 @@ def profile(request, username):
 
     person = get_object_or_404(get_user_model(), username = username)
     comments = MovieComment.objects.filter(user_id = person.id)
-
-    for i in range (len(comments)) :
-        comments[i].star = STARS[comments[i].rank]
+    
+    if len(comments):
+        for i in range (len(comments)) :
+            comments[i].star = STARS[comments[i].rank]
 
     reviews = Review.objects.filter(user_id = person.id)
     context = {
