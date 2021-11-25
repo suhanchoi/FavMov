@@ -15,8 +15,8 @@
       <input type="submit">
     </form>
   {% else %}
-    <a href="{% url 'accounts:login' %}">[취향을 생성하려면 로그인하세요.]</a>
+    <a href="{% url 'accounts:login' %}">취향을 생성하려면 로그인하세요.</a>
   {% endif %}
-  <a href="{% url 'accounts:profile' person.username %}">[back]</a>
+  <a href="{% url 'accounts:profile' person.username %}" class="btn btn-outline-dark">back</a>
 
 {% endblock  %}

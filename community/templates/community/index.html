@@ -30,12 +30,11 @@
     {% endif %}
 
       {% if request.user.is_authenticated %}
-        <a href="{% url 'community:detail' review.pk %}" class="btn btn-outline-dark">[DETAIL]</a>
+        <a href="{% url 'community:detail' review.pk %}" class="btn btn-outline-dark">DETAIL</a>
       {% else %}
-        <a href="{% url 'accounts:login' %}" class="btn btn-outline-dark">[DETAIL]</a>
+        <a href="{% url 'accounts:login' %}" class="btn btn-outline-dark">DETAIL</a>
       {% endif %}
-
-      <hr>
+      
     {% endfor %}
   {% else %}
   <p> 게시글이 없습니다. </p>

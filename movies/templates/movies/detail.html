@@ -4,8 +4,11 @@
   <h2 class="text-center">{{ movie.title }}</h2>
   {% comment %} <h3>{{ movie.pk }} 번째 글</h3> {% endcomment %}
   <hr>
+  <div class="img-center">
   <img src="{{ movie.poster_path}}"> <br>
+  </div>
   {% comment %} <p>영화 제목: {{ movie.title }}</p> {% endcomment %}
+  <br>
   <p>내용: {{ movie.overview }}</p>
   <p>개봉일: {{ movie.release_date }}</p>
   <p>인기도: {{ movie.popularity }}</p>
@@ -23,6 +26,25 @@
     {% endfor %}
 
   </div>
+
+  <div class="detailpage">
+      {% if request.user.is_authenticated %}
+      <form id="like-form" data-movie-pk="{{ movie.pk }}" class="d-inline">
+        {% csrf_token %}
+        {% if movie in person.like_movies.all %}
+          <button id="like-{{ movie.pk }}" class="btn btn-outline-dark">좋아요 취소</button>
+        {% else %}
+          <button id="like-{{ movie.pk }}" class="btn btn-outline-dark">좋아요</button>
+        {% endif %}
+      </form>
+
+    
+    {% else %}
+      <button onclick = "location.href= '{% url 'accounts:login' %}'">좋아요</button>
+      <hr>
+    {% endif %} 
+  </div>
+  
  <hr>
 
   <h4>댓글 목록</h4>
@@ -57,9 +79,46 @@
 </form>
 
 {% else %}
-<a href="{% url 'accounts:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
+<a href="{% url 'accounts:login' %}" class="btn btn-outline-dark">댓글을 작성하려면 로그인하세요.</a>
   <hr>
 {% endif %} 
-
-<a href="{% url 'movies:index' %}" class="btn btn-outline-dark">[back]</a>
+<hr>
+<a href="{% url 'movies:index' %}" class="btn btn-outline-dark">back</a>
 {% endblock  %}
+
+{% block script %}
+  <script>
+
+    const form_lst = document.querySelectorAll('#like-form')
+
+    form_lst.forEach(form => {
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      form.addEventListener('submit', function(event) {
+        event.preventDefault()
+        const moviePK = event.target.dataset.moviePk
+
+        axios({
+          method: 'post',
+          url: `/movies/${moviePK}/like/`,
+          headers: {'X-CSRFToken' : csrftoken}
+        })
+
+        .then(response => {
+          const isLiked = response.data.isLiked
+
+          const btn = document.querySelector(`#like-${moviePK}`)
+          if (isLiked) {
+            btn.innerText = '좋아요 취소'
+          }
+          else {
+            btn.innerText = '좋아요'
+          }
+      
+
+        })
+
+      })
+
+    })
+  </script>
+{% endblock script %}

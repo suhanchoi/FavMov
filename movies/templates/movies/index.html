@@ -43,66 +43,52 @@
     </button>
   </div>
 
-
-  <div class = "card_genre">
-  <h4>▸ 액션</h4>
+<div class = "card_genre">
+  <h4>▸ 취향에 따른 영화 추천</h4>
   </div>
 
   <div class="main_lst1">
+  {% for movie in rec_movies %}
     <div class="card">
-      <!-- 각 카드 헤더 -->
-      <div class="card-header">
-        <div class="card-header-img">
-         <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/aNtAP8ZzUMdnCPoqYgVOcgI0Eh4.jpg">
+      
+        <!-- 각 카드 헤더 -->
+        <div class="card-header">
+          <div class="card-header-img">
+          <img src="{{ movie.poster_path }}">
+          </div>
         </div>
-      </div>
-      <!--  카드 바디 헤더 -->
-      <div class="card-body-header">
-          
-        <h3>이터널스</h3>
-        <p class="card-body-hashtag">#supernatural #superhero #boredom</p>
-        <p>
-          수 천년에 걸쳐 그 모습을 드러내지 않고 살아온 불멸의 히어로들이 "어벤져스: 엔드게임" 이후 인류의 가장 오래된 적 '데비안츠'에 맞서기 위해 다시 힘을 합치면서 벌어지는 이야기
-        </p>
-        <a href="https://www.themoviedb.org/movie/524434-eternals?language=ko" class="btn btn-outline-danger">자세히 보기<a>
-    </div>
-    </div>
-    <div class="card">
-      <!-- 각 카드 헤더 -->
-      <div class="card-header">
-        <div class="card-header-img">
-        <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/14L4NGrqO4r7gJtVRiSRP5rNsL5.jpg">
-        </div>
-      </div>
-      <!--  카드 바디 헤더 -->
-      <div class="card-body-header">    
-        <h3>샹치와 텐 링즈의 전설</h3>
-        <p class="card-body-hashtag">#superhero #marvel_comics #martial_arts</p>
-        <p>
-            초인적인 능력을 가진 텐 링즈의 힘으로 수세기 동안 어둠의 세상을 지배해 온 웬우. 샹치는 아버지 웬우 밑에서 암살자로 훈련을 받았지만 이를 거부하고 평범함 삶을 선택한다. 
-        </p>
-        <a href="https://www.themoviedb.org/movie/566525-shang-chi-and-the-legend-of-the-ten-rings?language=ko" class="btn btn-outline-danger">자세히 보기</a>
-      </div>
-    </div>
-    <div class="card">
-      <!-- 각 카드 헤더 -->
-      <div class="card-header">
-        <div class="card-header-img">
-          <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/1Lh9LER4xRQ3INFFi2dfS2hpRwv.jpg">
-        </div>
-      </div>
-      <!--  카드 바디 헤더 -->
-      <div class="card-body-header">
-          
-          <h3>베놈 2: 렛 데어 비 카니지</h3>
-          <p class="card-body-hashtag">#hero #anti_hero #marvel_comics</p>
+        <!--  카드 바디 헤더 -->
+        <div class="card-body-header">
+            
+          <h4>{{ movie.title }}</h4>
+          {% comment %} <p>개봉 - {{ movie.release_date }}</p> {% endcomment %}
           <p>
-             연쇄살인마 클리터스 캐서디(우디 해럴슨)가 사형선고를 받는다. 죽을 생각이 전혀 없는 클리터스는 자신의 집행일을 연기할 목적으로 마지막 증언을 남기겠다며 탐사보도로 유명한 프리랜스 저널리스트 에디를 지목한다.
+          장르 - 
+            {% for genre in movie.genres.all %}
+              {{genre.name}}
+            {% endfor %}
+            <br>
+          평점 - {{ movie.vote_average }}
+          <br>
+          개봉 - {{ movie.release_date }}
           </p>
-          <a href="https://www.themoviedb.org/movie/524434-eternals?language=ko" class="btn btn-outline-danger">자세히 보기</a>
+          <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-outline-danger">자세히 보기<a>
       </div>
+      
     </div>
+    {% endfor %}
   </div>
+
+  {% if request.user.is_authenticated %}
+    {% if username == request.user.username %}
+      {% if person.like_genres.all or person.hate_genres.all or person.like_movies.all %}
+        <ul> <a href="{% url 'accounts:fond_update' person.username %}" class="btn btn-outline-dark">취향 변경</a> </ul>
+      {% else %}
+        <ul> <a href="{% url 'accounts:fond_create' person.username %}" class="btn btn-outline-dark">취향 생성</a> </ul>
+      {% endif %}
+      <ul> <a href="{% url 'accounts:fond_delete' person.username %}" class="btn btn-outline-dark">취향 삭제</a> </ul>
+    {% endif %}
+  {% endif %}
 
   <div class="fav_genres">
   <h3> 취향에 따른 영화 추천 </h3>
@@ -117,27 +103,12 @@
       </div>
     {% endfor %}
   </div>
-
-  {% comment %} 버튼 만들어서 취향 만들기 {% endcomment %}
-
-  {% comment %} <h3> 선호하는 영화 관련 추천 </h3>
-  <div class="movie-list">
-    {% for movie in rec_movies_genre %}
-      <div class="movie">
-        <h3>{{ movie.title }}</h3>
-        <p>{{ movie.overview }}</p>
-        <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-outline-dark">[detail]</a>
-        <hr>
-      </div>
-    {% endfor %}
-  </div> {% endcomment %}
-
-  <div class="movie-list">
+  <div>
     {% for movie in movies %}
       <div class="movie">
         <h3>{{ movie.title }}</h3>
         <p>{{ movie.overview }}</p>
-        <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-outline-dark">[detail]</a>
+        <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-outline-dark">detail</a>
         <hr>
       </div>
     {% endfor %}
