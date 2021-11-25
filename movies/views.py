@@ -16,7 +16,7 @@ from django.http.response import JsonResponse
 def index(request):
     
     movies = Movie.objects.all().order_by('-vote_average','-vote_count')
-    person = request.user
+    person = User.objects.none()
     
     if request.user.is_authenticated:
         user_pk = request.user.id
@@ -148,7 +148,7 @@ def index(request):
     # 만약 추천 영화가 아무것도 없다면, 
     if len(rec_movies) == 0:
         rec_movies = Movie.objects.all().order_by('-vote_average','-vote_count')
-        rec_movies = rec_movies[:6] # 갯수 할당 
+        rec_movies = rec_movies[:5] # 갯수 할당 
     
     # /movies/?page=2 ajax 요청 => json
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -182,6 +182,8 @@ def detail(request, movie_pk):
         '★★★★☆',
         '★★★★★'
     ]
+
+    person = User.objects.none()
 
     if request.user.is_authenticated:
         person = request.user
