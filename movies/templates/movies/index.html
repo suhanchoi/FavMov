@@ -104,6 +104,17 @@
     </div>
   </div>
 
+  {% if request.user.is_authenticated %}
+    {% if username == request.user.username %}
+      {% if person.like_genres.all or person.hate_genres.all or person.like_movies.all %}
+        <ul> <a href="{% url 'accounts:fond_update' person.username %}" class="btn btn-outline-dark">취향 변경</a> </ul>
+      {% else %}
+        <ul> <a href="{% url 'accounts:fond_create' person.username %}" class="btn btn-outline-dark">취향 생성</a> </ul>
+      {% endif %}
+      <ul> <a href="{% url 'accounts:fond_delete' person.username %}" class="btn btn-outline-dark">취향 삭제</a> </ul>
+    {% endif %}
+  {% endif %}
+
   <div class="fav_genres">
   <h3> 취향에 따른 영화 추천 </h3>
   </div>
