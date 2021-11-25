@@ -159,9 +159,15 @@
         <li class="nav-item">
           <a class="nav-link" aria-current="page" href="{% url 'community:index'%}">Community</a>
         </li>
+
+        {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'community:create'%}">New Review</a>
+        {% else %} 
+          <a class="nav-link" href="{% url 'accounts:login'%}">New Review</a>
+        {% endif %} 
         </li>
+        
         {% if user.is_authenticated %}
         <li class="nav-item">
         <a class="nav-link" href={% url 'accounts:profile' user %}>내 프로필 </a>
@@ -171,7 +177,6 @@
         <input id="input1" type="submit" value="Logout">
         </form> 
                       
-
         {% else %}
             <li class="nav-item">
             <a class="nav-link" href="{% url 'accounts:signup' %}">Sign up</a>
