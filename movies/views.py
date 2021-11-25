@@ -207,10 +207,13 @@ def detail(request, movie_pk):
 
     no_more_comment = False
 
-    my_comment = MovieComment.objects.filter(movie = this_movie)
-    print(my_comment)
-    if len(my_comment) >= 1:
-        no_more_comment = True
+    my_comments = MovieComment.objects.filter(movie = this_movie)
+
+    if request.user.is_authenticated:
+        if len(my_comments) >= 1:
+            for comment in my_comments:
+                if comment.user_id == person.id:
+                    no_more_comment = True
     
     context = {
         'movie': this_movie,
