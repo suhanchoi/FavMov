@@ -107,7 +107,7 @@
   <p> 작성한 댓글 </p>
    {% if comments|length %}
   {% for comment in comments  %}
-   {{ comment.content }} : {{ comment.rank }}
+  {{ comment.movie.title }} : {{ comment.content }} - {{ comment.star }}
   {% endfor %}
     {% else %}
     <p> 작성한 댓글이 없습니다. </p>
