@@ -103,11 +103,12 @@
       </div>
     </div>
   </div>
+
   <div class="fav_genres">
-  <h3> 선호하는 장르 추천 </h3>
+  <h3> 취향에 따른 영화 추천 </h3>
   </div>
   <div class="movie-list">
-    {% for movie in rec_movies_genre %}
+    {% for movie in rec_movies %}
       <div class="movie">
         <h3>{{ movie.title }}</h3>
         <p>{{ movie.overview }}</p>
@@ -117,8 +118,9 @@
     {% endfor %}
   </div>
 
-  <h3> 선호하는 영화 관련 추천 </h3>
+  {% comment %} 버튼 만들어서 취향 만들기 {% endcomment %}
 
+  {% comment %} <h3> 선호하는 영화 관련 추천 </h3>
   <div class="movie-list">
     {% for movie in rec_movies_genre %}
       <div class="movie">
@@ -128,7 +130,7 @@
         <hr>
       </div>
     {% endfor %}
-  </div>
+  </div> {% endcomment %}
 
   <div class="movie-list">
     {% for movie in movies %}

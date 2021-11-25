@@ -52,10 +52,12 @@ def logout(request):
     auth_logout(request)
     return redirect('community:index')
 
-# profile 여기다가 영화 장르 정보, 영화 포스터 정보 전달
+# profile 영화 포스터 정보 전달
+
+# 추가로 쓴 댓글, 쓴 
 @login_required
 def profile(request, username):
-    person = get_object_or_404(get_user_model(), username=username)
+    person = get_object_or_404(get_user_model(), username = username)
     context = {
         'person': person,
         'username':username,

@@ -10,7 +10,13 @@
   <p>개봉일: {{ movie.release_date }}</p>
   <p>인기도: {{ movie.popularity }}</p>
   <p>투표수: {{ movie.vote_count }}</p>
+  
+  {% if movie_comments|length %}
+    <p>평점: {{ rank_avg }}</p>
+  {% else %}
   <p>평점: {{ movie.vote_average }}</p>
+  {% endif %}
+
   <div>장르:
     {% for genre in movie.genres.all %}
       {{genre.name}}
@@ -20,7 +26,6 @@
  <hr>
 
   <h4>댓글 목록</h4>
-  평점 평균 : {{ rank_avg }}
   <ul>
   {% if movie_comments|length %}
     <p><b>{{ movie_comments|length }}개의 댓글이 있습니다.</b></p>
