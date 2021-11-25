@@ -57,7 +57,7 @@ def logout(request):
 # 추가로 쓴 댓글, 쓴 
 @login_required
 def profile(request, username):
-    person = get_object_or_404(get_user_model(), username=username)
+    person = get_object_or_404(get_user_model(), username = username)
     context = {
         'person': person,
         'username':username,
