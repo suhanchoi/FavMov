@@ -4,9 +4,9 @@
   <h1>{{ person.username }}의 프로필 페이지</h1>
   {% with followings=person.followings.all followers=person.followers.all %}
     <div>
-      <div id="follow-count">
+      <div id="follow-count" class="profile_total">
         팔로잉 : {{ followings|length }} / 팔로워 : {{ followers|length }}
-      </div>
+      </class=>
       {% if request.user != person %}
         <div>
           <form id="follow-form" data-user-id="{{ person.pk }}">
@@ -21,9 +21,26 @@
       {% endif %}
     </div>
     <div class="MyFavMov">
-    <h3> My FavMov </h3>
+
+      <div class="line_sum">
+      <ul><h3> My FavMov </h3></ul>
+      {% if request.user.is_authenticated %}
+        {% if username == request.user.username %}
+          {% if person.like_genres.all or person.hate_genres.all or person.like_movies.all %}
+            <ul> <a href="{% url 'accounts:fond_update' person.username %}" class="btn btn-outline-dark">취향 변경</a> </ul>
+          {% else %}
+            <ul> <a href="{% url 'accounts:fond_create' person.username %}" class="btn btn-outline-dark">취향 생성</a> </ul>
+          {% endif %}
+        <ul> <a href="{% url 'accounts:fond_delete' person.username %}" class="btn btn-outline-dark">취향 삭제</a> </ul>
+      {% endif %}
+    {% endif %}
+  </div>
     </div>
-    <p>
+
+  <br>
+  <br>
+  <br>
+    <div class="profile_total">
       <div> 선호하는 장르 :
         {% if person.like_genres.all %}
           {% for genre in person.like_genres.all %}
@@ -33,9 +50,9 @@
           <p>선호하는 장르가 없습니다.</p>
         {% endif %}
       </div>
-    </p>
+    </div>
 
-    <p>
+    <div class="profile_total">
      <div> 비선호하는 장르 :
         {% if person.hate_genres.all %}
           {% for genre in person.hate_genres.all %}
@@ -45,36 +62,56 @@
           <p>비선호하는 장르가 없습니다.</p>
         {% endif %}
       </div>
-    </p>
+    </div>
 
-    <p>
-      <div> 좋아하는 영화 :
-        {% if person.like_movies.all %}
-          {% for movie in person.like_movies.all %}
-            <img src = "{{ movie.poster_path }}" > 
-            < {{ movie.title }} >
-          {% endfor%}
-        {% else %}
-          <p>좋아하는 영화가 없습니다.</p>
-        {% endif %}
+ 
+   
+ 
+      <div class="profile_total"> 좋아하는 영화 :
+        
+          {% if person.like_movies.all %}
+            {% for movie in person.like_movies.all %}
+            <div>
+            <div class="profile_fav"> 
+              <div class="card2" style="width: 18rem;">
+              <img src="{{ movie.poster_path }}" class="card-img-top" alt="poster_{{ movie.poster_path }}">
+              <div class="card-body">
+                <h4>{{ movie.title }}</h4>
+                <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-outline-dark">Detail</a>
+              </div>
+            </div>
+          
+              
+            </div>
+            </div>
+            {% endfor%}
+          {% else %}
+            <p>좋아하는 영화가 없습니다.</p>
+          {% endif %}
       </div>
-    </p>
-
+   
     {% comment %} 이미지 태그 활용 {% endcomment %}
 
-    {% if request.user.is_authenticated %}
-      {% if username == request.user.username %}
-        {% if person.like_genres.all or person.hate_genres.all or person.like_movies.all %}
-          <ul> <a href="{% url 'accounts:fond_update' person.username %}" class="btn btn-outline-dark">취향 변경</a> </ul>
-        {% else %}
-          <ul> <a href="{% url 'accounts:fond_create' person.username %}" class="btn btn-outline-dark">취향 생성</a> </ul>
-        {% endif %}
-      <ul> <a href="{% url 'accounts:fond_delete' person.username %}" class="btn btn-outline-dark">취향 삭제</a> </ul>
-    {% endif %}
-  {% endif %}
   
 
   {% comment %} 썼던 평점 댓글, 게시글 출력 {% endcomment %}
+  <p> 작성한 게시글 </p>
+  {% if reviews|length %}
+  {% for review in reviews  %}
+   {{ review.title }}
+  {% endfor %}
+  {% else %}
+    <p> 작성한 게시글이 없습니다. </p>
+  {% endif %}
+
+  <p> 작성한 댓글 </p>
+   {% if comments|length %}
+  {% for comment in comments  %}
+   {{ comment.content }} : {{ comment.rank }}
+  {% endfor %}
+    {% else %}
+    <p> 작성한 댓글이 없습니다. </p>
+  {% endif %}
 
   {% endwith %}
 {% endblock %}
