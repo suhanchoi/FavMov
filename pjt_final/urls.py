@@ -21,5 +21,6 @@ urlpatterns = [
     path('community/', include('community.urls')),
     path('accounts/', include('accounts.urls')),
     path('movies/', include('movies.urls')),
+    path('', include('movies.urls')),
 ]
 
