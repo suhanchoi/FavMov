@@ -37,3 +37,5 @@ class MovieComment(models.Model):
     rank = models.IntegerField(choices=RANKS, default=10)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    movie_commment_created_at = models.DateTimeField(auto_now_add=True)
+    movie_commment_updated_at = models.DateTimeField(auto_now=True)

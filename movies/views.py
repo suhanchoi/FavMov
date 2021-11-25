@@ -16,7 +16,8 @@ from django.http.response import JsonResponse
 def index(request):
     
     movies = Movie.objects.all().order_by('-vote_average','-vote_count')
-
+    person = request.user
+    
     if request.user.is_authenticated:
         user_pk = request.user.id
         username = request.user.username
@@ -185,8 +186,8 @@ def detail(request, movie_pk):
     if request.user.is_authenticated:
         person = request.user
 
-    movie = get_object_or_404(Movie, pk=movie_pk)
-    movie_comments = movie.moviecomment_set.all()
+    this_movie = get_object_or_404(Movie, pk=movie_pk)
+    movie_comments = this_movie.moviecomment_set.all()
     movie_comment_form = MovieCommentForm()
     rank_sum = 0
     rank_cnt = 0
@@ -198,15 +199,24 @@ def detail(request, movie_pk):
     if rank_cnt >= 1:
         rank_avg = round(rank_sum / rank_cnt,2)
 
-        movie.vote_average = rank_avg
-        movie.save()
+        this_movie.vote_average = rank_avg
+        this_movie.save()
+
+
+    no_more_comment = False
+
+    my_comment = MovieComment.objects.filter(movie = this_movie)
+    print(my_comment)
+    if len(my_comment) >= 1:
+        no_more_comment = True
     
     context = {
-        'movie': movie,
+        'movie': this_movie,
         'movie_comment_form': movie_comment_form,
         'movie_comments': movie_comments,
         'rank_avg' : rank_avg,
         'person' : person,
+        'no_more_comment' : no_more_comment,
     }
     return render(request, 'movies/detail.html', context)
 
@@ -248,14 +258,7 @@ def like(request, movie_pk):
         like_movies = person.like_movies.all()
 
         if like_movies.filter(pk=movie_pk).exists():
-            # person.like_movies = person.like_movies.exclude(title = movie.title)
-            # person.save() # Use like_movies.set() instead.
-
-
-            person.like_movies.remove(movie) # 영화 자체가 지워짐
-
-            
-
+            person.like_movies.remove(movie) 
             isLiked = False
         else:
             person.like_movies.add(movie)
