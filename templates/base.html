@@ -12,14 +12,17 @@
   <style>
 
     body{
+
         font-family: 'Gowun Batang', serif;
         background-color: rgb(248, 248, 255);
         margin-top:100px;
-        column-gap:50px;
+        
     }
+   
     .movie-list{margin-top:100px;}
     h1{
         margin-bottom:30px;
+
     }
 
     #input1 {
@@ -33,7 +36,6 @@
         height:400px;
         display: flex;
         justify-content:center;
- 
     }
     .card_genre {
         margin-top: 40px;
@@ -48,8 +50,8 @@
             }
 
     .card {
-        height: 400px;
-        width: 350px;
+        height: 300px;
+        width: 18rem;
         border-radius: 15px;
         display: inline;
         margin-top: 30px;
@@ -58,6 +60,7 @@
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         overflow: hidden;
         float: left;
+        
         }
 
 
@@ -67,7 +70,7 @@
     }
     .card-header{
         width: 100%;
-        height: 300px;
+        height: 150px;
     }
     .card-header-img {
         line-height: 30px;
@@ -88,18 +91,26 @@
         margin: 20px 20px 0px 20px;
        
     }
-    .card-body-header h3{
+    .card-body-header h4{
         padding:10px 0px 0px 0px;
+        display: inline-block;
+        width:150px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow: ellipsis;
+
+        white-space:normal;
+        line-height:1;
+        
     }
 
 
     .card-body-hashtag {
         color: rgb(0,0,0);
-    }
-
-    .card-body-hashtag {
         padding:20px 0px 20px 0px;
     }
+
+ 
 
     .btn btn-outline-danger{
         margin: 0 auto;
@@ -108,6 +119,14 @@
 
     .MyFavMov {
         padding:30px 0px 0px 0px;
+    }
+    .card-body > h4{
+    display: inline-block;
+    width: 200px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+
     }
     .detailpage {
         padding:10px 0px 10px 0px;
@@ -136,9 +155,35 @@
 
     }
     .fav_genres{
-    margin:60px 0px 0px 0px;
+    margin:100px 0px 0px 0px;
+    }
+
+    .profile_fav img{
+        margin:10px 0px 0px 0px;
+        width:auto;
+        height:350px;
+    }
+
+    .profile_fav {
+        display: inline;
+        float:left;
+        display: flex;
+        justify-content: space-between;
+        margin: 0 10px;
+        margin-top: 65px;
+        flex-wrap: wrap;
     }
  
+    .line_sum > ul{
+    float:left;
+    margin:10px 0px 0px 0px;
+    }
+    .profile_total{
+    margin:10px 0px 0px 20px;   
+    }
+    .img-center{
+        text-align: center;
+    }
 
   </style>
 </head>
@@ -198,9 +243,6 @@
   {% endblock %}
 
 </body>
-<footer class="bottom text-center text-dark justify-content-center align-items-center pt-1">
-    <p>Created By Choiai</p>
-    <p>Copyright 2021. Choiai. All right reserved.
-    </p>
-</footer>
+
+
 </html>

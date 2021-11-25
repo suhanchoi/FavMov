@@ -4,8 +4,11 @@
   <h2 class="text-center">{{ movie.title }}</h2>
   {% comment %} <h3>{{ movie.pk }} 번째 글</h3> {% endcomment %}
   <hr>
+  <div class="img-center">
   <img src="{{ movie.poster_path}}"> <br>
+  </div>
   {% comment %} <p>영화 제목: {{ movie.title }}</p> {% endcomment %}
+  <br>
   <p>내용: {{ movie.overview }}</p>
   <p>개봉일: {{ movie.release_date }}</p>
   <p>인기도: {{ movie.popularity }}</p>
@@ -57,9 +60,9 @@
 </form>
 
 {% else %}
-<a href="{% url 'accounts:login' %}">[댓글을 작성하려면 로그인하세요.]</a>
+<a href="{% url 'accounts:login' %}" class="btn btn-outline-dark">댓글을 작성하려면 로그인하세요.</a>
   <hr>
 {% endif %} 
-
-<a href="{% url 'movies:index' %}" class="btn btn-outline-dark">[back]</a>
+<hr>
+<a href="{% url 'movies:index' %}" class="btn btn-outline-dark">back</a>
 {% endblock  %}

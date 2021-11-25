@@ -43,7 +43,43 @@
     </button>
   </div>
 
+<div class = "card_genre">
+  <h4>▸ 취향에 따른 영화 추천</h4>
+  </div>
 
+  <div class="main_lst1">
+  {% for movie in rec_movies %}
+    <div class="card">
+      
+        <!-- 각 카드 헤더 -->
+        <div class="card-header">
+          <div class="card-header-img">
+          <img src="{{ movie.poster_path }}">
+          </div>
+        </div>
+        <!--  카드 바디 헤더 -->
+        <div class="card-body-header">
+            
+          <h4>{{ movie.title }}</h4>
+          {% comment %} <p>개봉 - {{ movie.release_date }}</p> {% endcomment %}
+          <p>
+          장르 - 
+            {% for genre in movie.genres.all %}
+              {{genre.name}}
+            {% endfor %}
+            <br>
+          평점 - {{ movie.vote_average }}
+          <br>
+          개봉 - {{ movie.release_date }}
+          </p>
+          <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-outline-danger">자세히 보기<a>
+      </div>
+      
+    </div>
+    {% endfor %}
+  </div>
+
+{% comment %} 
   <div class = "card_genre">
   <h4>▸ 액션</h4>
   </div>
@@ -102,9 +138,9 @@
           <a href="https://www.themoviedb.org/movie/524434-eternals?language=ko" class="btn btn-outline-danger">자세히 보기</a>
       </div>
     </div>
-  </div>
+  </div> {% endcomment %}
 
-  <div class="fav_genres">
+  {% comment %} <div class="fav_genres">
   <h3> 취향에 따른 영화 추천 </h3>
   </div>
   <div class="movie-list">
@@ -116,7 +152,7 @@
         <hr>
       </div>
     {% endfor %}
-  </div>
+  </div> {% endcomment %}
 
   {% comment %} 버튼 만들어서 취향 만들기 {% endcomment %}
 
@@ -132,12 +168,12 @@
     {% endfor %}
   </div> {% endcomment %}
 
-  <div class="movie-list">
+  <div>
     {% for movie in movies %}
       <div class="movie">
         <h3>{{ movie.title }}</h3>
         <p>{{ movie.overview }}</p>
-        <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-outline-dark">[detail]</a>
+        <a href="{% url 'movies:detail' movie.pk %}" class="btn btn-outline-dark">detail</a>
         <hr>
       </div>
     {% endfor %}

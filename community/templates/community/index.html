@@ -29,8 +29,8 @@
       <hr>
     {% endif %}  
 
-      <a href="{% url 'community:detail' review.pk %}" class="btn btn-outline-dark">[DETAIL]</a>
-      <hr>
+      <a href="{% url 'community:detail' review.pk %}" class="btn btn-outline-dark">DETAIL</a>
+      
     {% endfor %}
   {% else %}
   <p> 게시글이 없습니다. </p>
