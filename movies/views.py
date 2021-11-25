@@ -8,15 +8,22 @@ from django.core.paginator import Paginator
 from django.core import serializers
 from django.http import HttpResponse
 from .forms import MovieCommentForm
+from django.http.response import JsonResponse
 
 
 # User의 취향에 맞게 영화 추천해주기
 @require_safe
 def index(request):
-
+    
     movies = Movie.objects.all().order_by('-vote_average','-vote_count')
-    paginator = Paginator(movies, 10)
 
+    if request.user.is_authenticated:
+        user_pk = request.user.id
+        username = request.user.username
+        person = get_object_or_404(get_user_model(), pk=user_pk)
+
+    
+    paginator = Paginator(movies, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -102,8 +109,9 @@ def index(request):
             rec_movies = Movie.objects.none()
             for i in range(len(like_movies_genres_QS)):
                 in_movies = (Movie.objects.filter(genres=f'{like_movies_genres_QS[i].id}'))
-                for j in range(len(hate_genres)): # in_movies 에서 싫어하는 장르 빼고 난 후 
-                    in_movies = in_movies.exclude(genres=f'{hate_genres[j].id}')
+                if hate_genres != 0:
+                    for j in range(len(hate_genres)): # in_movies 에서 싫어하는 장르 빼고 난 후 
+                        in_movies = in_movies.exclude(genres=f'{hate_genres[j].id}')
                 # 선호하는 영화 겹치는 항목 제거
                 for j in range(len(like_movies)):
                     in_movies = in_movies.exclude(id=f'{like_movies[j].id}')
@@ -117,7 +125,7 @@ def index(request):
                     rec_movies = rec_movies.exclude(genres=f'{hate_genres[i].id}')
 
         rec_movies = rec_movies.order_by('-vote_average','-vote_count') # 정렬
-        rec_movies = rec_movies[:6] # 갯수 할당 
+        rec_movies = rec_movies[:5] # 갯수 할당 
 
         print('rec_movies',rec_movies)
         print('hate_genres',hate_genres)
@@ -150,6 +158,8 @@ def index(request):
         context = {
             'movies': page_obj,
             'rec_movies':rec_movies,
+            'username':username,
+            'person':person,
         }
 
         return render(request, 'movies/index.html', context)
@@ -172,6 +182,9 @@ def detail(request, movie_pk):
         '★★★★★'
     ]
 
+    if request.user.is_authenticated:
+        person = request.user
+
     movie = get_object_or_404(Movie, pk=movie_pk)
     movie_comments = movie.moviecomment_set.all()
     movie_comment_form = MovieCommentForm()
@@ -193,6 +206,7 @@ def detail(request, movie_pk):
         'movie_comment_form': movie_comment_form,
         'movie_comments': movie_comments,
         'rank_avg' : rank_avg,
+        'person' : person,
     }
     return render(request, 'movies/detail.html', context)
 
@@ -225,4 +239,31 @@ def delete_movie_comment(request, movie_pk, moviecomment_pk):
     return redirect('movies:detail', movie.pk)
 
 
+@require_POST
+def like(request, movie_pk):
+    if request.user.is_authenticated:
+        movie = get_object_or_404(Movie, pk=movie_pk)
+        person = request.user
 
+        like_movies = person.like_movies.all()
+
+        if like_movies.filter(pk=movie_pk).exists():
+            # person.like_movies = person.like_movies.exclude(title = movie.title)
+            # person.save() # Use like_movies.set() instead.
+
+
+            person.like_movies.remove(movie) # 영화 자체가 지워짐
+
+            
+
+            isLiked = False
+        else:
+            person.like_movies.add(movie)
+            person.save()
+
+            isLiked = True
+        context = {
+            'isLiked': isLiked,
+        }
+        return JsonResponse(context)
+    return redirect('accounts:login')
