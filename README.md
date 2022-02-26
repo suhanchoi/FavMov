@@ -72,7 +72,7 @@
    - Django 3.2.3
    - Node.js LTS
 2. 도구
-   - VSCpde
+   - VSCode
 3. 아키텍쳐
    - Django & Vanila JS
 
